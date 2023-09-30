@@ -32,11 +32,9 @@ Jogos de ritmo como Guitar Hero, Guitar Flash e outros semelhantes.
 
 ## Jornada do usuários (3 pts)
 
-O controle tem 4 botões coloridos que correspondem às notas que aparecem na tela do jogo. O jogador deve pressionar os botões certos no momento certo para acertar as notas e ganhar pontos.
+O controle Rockstar no estilo retrô lembra os fliperamas dos anos 80 e 90, que fizeram parte da vida de muitos. É uma forma de reviver esses momentos e homenagear os clássicos dos videogames. O Rockstar traz de volta a nostalgia de uma época memorável, que os usuários um pouco mais saudosistas vão adorar!
 
-Ao invés de jogar ou em um controle convencional, o usuário pode ter a experiência de jogar em controle no estilo retrô, como se fosse um fliperama.
-
-Além disso o usuário pode seguir as cores das notas é que isso facilita a memorização e a coordenação motora do jogador. As cores ajudam o jogador a identificar rapidamente as notas que deve tocar, sem precisar olhar para o controle. Além disso, as cores estimulam o cérebro e aumentam a atenção e a concentração do jogador.
+Além disso o usuário pode seguir as cores das notas é que isso facilita a memorização e a coordenação motora do jogador. As cores ajudam o jogador a identificar rapidamente as notas que deve tocar, sem precisar olhar para o controle. Além disso, as cores estimulam o cérebro e aumentam a atenção e a concentração do jogador, ótimo para os usuários mais competitivos.
 
 
 ## Comandos/ Feedbacks (2 pts)
