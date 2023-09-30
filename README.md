@@ -47,19 +47,20 @@ Joystick - Distorce a nota conforme é movido
 
 ## In/OUT (3 pts)
 
-#Entradas digitais: 
+Entradas digitais: 
 Botão 1, 2, 3 e 4 - Representam as notas
 Botão 5 - Usa o bônus quando disponível
 
-#Entradas analógicas: 
+Entradas analógicas: 
 Joystick - Distorção da nota
 
-#Saídas digitais: 
+Saídas digitais: 
 LED1 - Aceso com o controle ligado (handshake bem-sucedido) 
 LED2 - Bônus disponível para ser usado pelo usuário
 
 
 ### Design (2 pts)
+
 
 ![image](https://github.com/insper-classroom/23b-emb-proj-projeto-embarcados/assets/92753945/bed8639e-83c5-4a0c-bcac-65bbbd745dd2)
 
