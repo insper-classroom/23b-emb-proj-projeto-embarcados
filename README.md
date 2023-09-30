@@ -6,24 +6,25 @@ Desenvolvendo um controle remoto.
 
 ### Integrantes
 
-- Nome1
-- Nome2
+- Lucas Novais de Oliveira 
+- Gustavo Mendes
+- Alexandre Santarossa
 
 ### Ideia
 
-<!--  Descreva aqui em poucas palavras qual a ideia do seu controle. Se ele vai ser de jogo ou de aplicação -->
+Controle para jogos de ritmo musical, no estilo de Guitar Flash
 
 ### Nome
 
-<!-- De um nome ao seu controle! -->
+Rockstar!
 
 ### Usuários 
 
-<!-- Descreva aqui quem seriam os possíveis usuários deste controle. -->
+Amantes dos jogos de ritmo musical e entusiastas da Computação Embarcada.
 
 ### Software/Jogo 
 
-<!-- Qual software que seu controle vai controlar? -->
+Jogos de ritmo como Guitar Hero, Guitar Flash e outros semelhantes.
 
 ### Jornada do usuários (3 pts)
 
@@ -39,12 +40,18 @@ Quais os feedbacks que seu controle vai fornecer ao usuário?
 
 ## In/OUT (3 pts)
 
-<!--
-Para cada Comando/ Feedback do seu controle, associe qual sensores/ atuadores pretende utilizar? Faca em formato de lista, exemplo:
+Entradas digitais: 
+Botão 1, 2, 3 e 4 - Representam as notas
 
-- Avanca música: Push button amarelo
-- Volume da música: Fita de LED indicando potência do som
--->
+Botão 5 - Usa o bônus quando disponível
+
+Entradas analógicas: 
+Joystick - Distorção da nota
+
+Saidas digitais: 
+LED1 - Aceso com o controle ligado (handshake bem-sucedido) 
+
+LED2 - Bônus disponível para ser usado pelo usuário
 
 ### Design (2 pts)
 
