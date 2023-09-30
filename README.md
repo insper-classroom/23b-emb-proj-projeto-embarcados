@@ -4,28 +4,28 @@ Desenvolvendo um controle remoto.
 
 ## Entrega 1
 
-### Integrantes
+## Integrantes
 
 - Lucas Novais de Oliveira 
 - Gustavo Mendes
 - Alexandre Santarossa
 
-### Ideia
+## Ideia
 
 Controle para jogos de ritmo musical, no estilo de Guitar Flash.
 
 
-### Nome
+## Nome
 
 Rockstar!
 
 
-### Usuários 
+## Usuários 
 
 Amantes dos jogos de ritmo musical e entusiastas da Computação Embarcada.
 
 
-### Software/Jogo 
+## Software/Jogo 
 
 Jogos de ritmo como Guitar Hero, Guitar Flash e outros semelhantes.
 
@@ -34,7 +34,7 @@ Jogos de ritmo como Guitar Hero, Guitar Flash e outros semelhantes.
 
 <!-- Descreva ao menos duas jornadas de usuários distintos, é para caprichar! -->
 
-### Comandos/ Feedbacks (2 pts)
+## Comandos/ Feedbacks (2 pts)
 
 Botão 1 - Toca a primeira nota
 Botão 2 - Toca a segunda nota
@@ -45,7 +45,7 @@ Botão 5 - Usa o bônus quando disponível
 Joystick - Distorce a nota conforme é movido
 
 
-## In/OUT (3 pts)
+## In/Out (3 pts)
 
 Entradas digitais: 
 Botão 1, 2, 3 e 4 - Representam as notas
