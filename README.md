@@ -12,19 +12,23 @@ Desenvolvendo um controle remoto.
 
 ### Ideia
 
-Controle para jogos de ritmo musical, no estilo de Guitar Flash
+Controle para jogos de ritmo musical, no estilo de Guitar Flash.
+
 
 ### Nome
 
 Rockstar!
 
+
 ### Usuários 
 
 Amantes dos jogos de ritmo musical e entusiastas da Computação Embarcada.
 
+
 ### Software/Jogo 
 
 Jogos de ritmo como Guitar Hero, Guitar Flash e outros semelhantes.
+
 
 ### Jornada do usuários (3 pts)
 
@@ -32,29 +36,30 @@ Jogos de ritmo como Guitar Hero, Guitar Flash e outros semelhantes.
 
 ### Comandos/ Feedbacks (2 pts)
 
-<!-- 
-Quais são os comandos/ operacões possíveis do seu controle?
+Botão 1 - Toca a primeira nota
+Botão 2 - Toca a segunda nota
+Botão 3 - Toca a terceira nota 
+Botão 4 - Toca a quarta nota
+Botão 5 - Usa o bônus quando disponível
 
-Quais os feedbacks que seu controle vai fornecer ao usuário?
--->
+Joystick - Distorce a nota conforme é movido
+
 
 ## In/OUT (3 pts)
 
-Entradas digitais: 
+#Entradas digitais: 
 Botão 1, 2, 3 e 4 - Representam as notas
-
 Botão 5 - Usa o bônus quando disponível
 
-Entradas analógicas: 
+#Entradas analógicas: 
 Joystick - Distorção da nota
 
-Saidas digitais: 
+#Saídas digitais: 
 LED1 - Aceso com o controle ligado (handshake bem-sucedido) 
-
 LED2 - Bônus disponível para ser usado pelo usuário
+
 
 ### Design (2 pts)
 
-<!--
-Faca um esboco de como seria esse controle (vai ter uma etapa que terão que detalhar melhor isso).
--->
+![image](https://github.com/insper-classroom/23b-emb-proj-projeto-embarcados/assets/92753945/bed8639e-83c5-4a0c-bcac-65bbbd745dd2)
+
