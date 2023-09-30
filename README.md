@@ -30,9 +30,14 @@ Amantes dos jogos de ritmo musical e entusiastas da Computação Embarcada.
 Jogos de ritmo como Guitar Hero, Guitar Flash e outros semelhantes.
 
 
-### Jornada do usuários (3 pts)
+## Jornada do usuários (3 pts)
 
-<!-- Descreva ao menos duas jornadas de usuários distintos, é para caprichar! -->
+O controle tem 4 botões coloridos que correspondem às notas que aparecem na tela do jogo. O jogador deve pressionar os botões certos no momento certo para acertar as notas e ganhar pontos.
+
+Ao invés de jogar ou em um controle convencional, o usuário pode ter a experiência de jogar em controle no estilo retrô, como se fosse um fliperama.
+
+Além disso o usuário pode seguir as cores das notas é que isso facilita a memorização e a coordenação motora do jogador. As cores ajudam o jogador a identificar rapidamente as notas que deve tocar, sem precisar olhar para o controle. Além disso, as cores estimulam o cérebro e aumentam a atenção e a concentração do jogador.
+
 
 ## Comandos/ Feedbacks (2 pts)
 
@@ -59,7 +64,7 @@ LED1 - Aceso com o controle ligado (handshake bem-sucedido) 
 LED2 - Bônus disponível para ser usado pelo usuário
 
 
-### Design (2 pts)
+## Design (2 pts)
 
 
 ![image](https://github.com/insper-classroom/23b-emb-proj-projeto-embarcados/assets/92753945/bed8639e-83c5-4a0c-bcac-65bbbd745dd2)
