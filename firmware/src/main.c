@@ -19,11 +19,36 @@
 #define LED_IDX      8
 #define LED_IDX_MASK (1 << LED_IDX)
 
-// Botão
-#define BUT_PIO      PIOA
-#define BUT_PIO_ID   ID_PIOA
-#define BUT_IDX      11
-#define BUT_IDX_MASK (1 << BUT_IDX)
+// Botão verde
+#define BUT_PIO PIOA
+#define BUT_PIO_ID ID_PIOA
+#define BUT_PIO_PIN 6
+#define BUT_PIO_PIN_MASK (1 << BUT_PIO_PIN)
+
+// Botão vermelho
+#define BUT1_PIO PIOD
+#define BUT1_PIO_ID ID_PIOD
+#define BUT1_PIO_PIN 25
+#define BUT1_PIO_PIN_MASK (1 << BUT1_PIO_PIN)
+
+// Botão amarelo
+#define BUT2_PIO PIOD
+#define BUT2_PIO_ID ID_PIOD
+#define BUT2_PIO_PIN 24
+#define BUT2_PIO_PIN_MASK (1 << BUT2_PIO_PIN)
+
+// Botão azul
+#define BUT3_PIO PIOA
+#define BUT3_PIO_ID ID_PIOA
+#define BUT3_PIO_PIN 24
+#define BUT3_PIO_PIN_MASK (1 << BUT3_PIO_PIN)
+
+// Botão power
+#define BUT4_PIO PIOD
+#define BUT4_PIO_ID ID_PIOD
+#define BUT4_PIO_PIN 22
+#define BUT4_PIO_PIN_MASK (1 << BUT4_PIO_PIN)
+
 
 // usart (bluetooth ou serial)
 // Descomente para enviar dados
@@ -45,7 +70,23 @@
 
 #define TASK_BLUETOOTH_STACK_SIZE            (4096/sizeof(portSTACK_TYPE))
 #define TASK_BLUETOOTH_STACK_PRIORITY        (tskIDLE_PRIORITY)
+#define TASK_BUT_STACK_SIZE (4096 / sizeof(portSTACK_TYPE))
+#define TASK_BUT_STACK_PRIORITY (tskIDLE_PRIORITY)
 
+
+/************************************************************************/
+/* recursos RTOS                                                        */
+/************************************************************************/
+
+/** Semaforo a ser usado pela task led */
+SemaphoreHandle_t xSemaphoreBut; //semaforo botao placa
+SemaphoreHandle_t xSemaphoreBut1;
+SemaphoreHandle_t xSemaphoreBut2;
+SemaphoreHandle_t xSemaphoreBut3;
+SemaphoreHandle_t xSemaphoreBut4;
+
+/** Queue for msg log send data */
+QueueHandle_t xQueueLedFreq;
 /************************************************************************/
 /* prototypes                                                           */
 /************************************************************************/
@@ -56,7 +97,11 @@ extern void vApplicationIdleHook(void);
 extern void vApplicationTickHook(void);
 extern void vApplicationMallocFailedHook(void);
 extern void xPortSysTickHandler(void);
-
+void but_callback(void);
+void but1_callback(void);
+void but2_callback(void);
+void but3_callback(void);
+void but4_callback(void);
 /************************************************************************/
 /* constants                                                            */
 /************************************************************************/
@@ -102,7 +147,35 @@ extern void vApplicationMallocFailedHook(void) {
 /************************************************************************/
 /* handlers / callbacks                                                 */
 /************************************************************************/
+void but_callback(void) {
+	printf("callback botao 0 \n");
+	BaseType_t xHigherPriorityTaskWoken = pdFALSE;
+	xSemaphoreGiveFromISR(xSemaphoreBut, &xHigherPriorityTaskWoken); //se foi liberado de uma ISR
+}
 
+void but1_callback(void) {
+	printf("callback botao 1 \n");
+	BaseType_t xHigherPriorityTaskWoken = pdFALSE;
+	xSemaphoreGiveFromISR(xSemaphoreBut1, &xHigherPriorityTaskWoken); //se foi liberado de uma ISR
+}
+
+void but2_callback(void) {
+	printf("callback botao 2 \n");
+	BaseType_t xHigherPriorityTaskWoken = pdFALSE;
+	xSemaphoreGiveFromISR(xSemaphoreBut2, &xHigherPriorityTaskWoken); //se foi liberado de uma ISR
+}
+
+void but3_callback(void) {
+	printf("callback botao 3 \n");
+	BaseType_t xHigherPriorityTaskWoken = pdFALSE;
+	xSemaphoreGiveFromISR(xSemaphoreBut3, &xHigherPriorityTaskWoken); //se foi liberado de uma ISR
+}
+
+void but4_callback(void) {
+	printf("callback botao 4 \n");
+	BaseType_t xHigherPriorityTaskWoken = pdFALSE;
+	xSemaphoreGiveFromISR(xSemaphoreBut4, &xHigherPriorityTaskWoken); //se foi liberado de uma ISR
+}
 /************************************************************************/
 /* funcoes                                                              */
 /************************************************************************/
@@ -112,10 +185,84 @@ void io_init(void) {
 	// Ativa PIOs
 	pmc_enable_periph_clk(LED_PIO_ID);
 	pmc_enable_periph_clk(BUT_PIO_ID);
-
+	pmc_enable_periph_clk(BUT1_PIO_ID);
+	pmc_enable_periph_clk(BUT2_PIO_ID);
+	pmc_enable_periph_clk(BUT3_PIO_ID);
+	pmc_enable_periph_clk(BUT4_PIO_ID);
 	// Configura Pinos
 	pio_configure(LED_PIO, PIO_OUTPUT_0, LED_IDX_MASK, PIO_DEFAULT | PIO_DEBOUNCE);
-	pio_configure(BUT_PIO, PIO_INPUT, BUT_IDX_MASK, PIO_PULLUP);
+	pio_configure(BUT_PIO, PIO_INPUT, BUT_PIO_PIN_MASK, PIO_PULLUP);
+	pio_configure(BUT1_PIO, PIO_INPUT, BUT1_PIO_PIN_MASK, PIO_PULLUP);
+	pio_configure(BUT2_PIO, PIO_INPUT, BUT2_PIO_PIN_MASK, PIO_PULLUP);
+	pio_configure(BUT3_PIO, PIO_INPUT, BUT3_PIO_PIN_MASK, PIO_PULLUP);
+	pio_configure(BUT4_PIO, PIO_INPUT, BUT4_PIO_PIN_MASK, PIO_PULLUP);
+	
+	// Configura interrupção no pino referente ao botao e associa
+	// função de callback caso uma interrupção for gerada
+	// a função de callback é a: but_callback()
+	pio_handler_set(BUT_PIO,
+					BUT_PIO_ID,
+					BUT_PIO_PIN_MASK,
+					PIO_IT_FALL_EDGE,
+					but_callback);
+					
+	pio_handler_set(BUT1_PIO,
+					BUT1_PIO_ID,
+					BUT1_PIO_PIN_MASK,
+					PIO_IT_FALL_EDGE,
+					but1_callback);
+	
+	pio_handler_set(BUT2_PIO,
+					BUT2_PIO_ID,
+					BUT2_PIO_PIN_MASK,
+					PIO_IT_FALL_EDGE,
+					but2_callback);
+	
+	pio_handler_set(BUT3_PIO,
+					BUT3_PIO_ID,
+					BUT3_PIO_PIN_MASK,
+					PIO_IT_FALL_EDGE,
+					but3_callback);
+	
+	pio_handler_set(BUT4_PIO,
+					BUT4_PIO_ID,
+					BUT4_PIO_PIN_MASK,
+					PIO_IT_FALL_EDGE,
+					but4_callback);		
+							
+	// Ativa interrupção e limpa primeira IRQ gerada na ativacao
+	pio_enable_interrupt(BUT_PIO, BUT_PIO_PIN_MASK);
+	pio_get_interrupt_status(BUT_PIO);
+	
+	pio_enable_interrupt(BUT1_PIO, BUT1_PIO_PIN_MASK);
+	pio_get_interrupt_status(BUT1_PIO);
+	
+	pio_enable_interrupt(BUT2_PIO, BUT2_PIO_PIN_MASK);
+	pio_get_interrupt_status(BUT2_PIO);
+	
+	pio_enable_interrupt(BUT3_PIO, BUT3_PIO_PIN_MASK);
+	pio_get_interrupt_status(BUT3_PIO);
+	
+	pio_enable_interrupt(BUT4_PIO, BUT4_PIO_PIN_MASK);
+	pio_get_interrupt_status(BUT4_PIO);
+	
+	// Configura NVIC para receber interrupcoes do PIO do botao
+	// com prioridade 4 (quanto mais próximo de 0 maior)
+	NVIC_EnableIRQ(BUT_PIO_ID);
+	NVIC_SetPriority(BUT_PIO_ID, 4); // Prioridade 4
+	
+	NVIC_EnableIRQ(BUT1_PIO_ID);
+	NVIC_SetPriority(BUT1_PIO_ID, 4); // Prioridade 4
+	
+	NVIC_EnableIRQ(BUT2_PIO_ID);
+	NVIC_SetPriority(BUT2_PIO_ID, 4); // Prioridade 4
+	
+	NVIC_EnableIRQ(BUT3_PIO_ID);
+	NVIC_SetPriority(BUT3_PIO_ID, 4); // Prioridade 4
+	
+	NVIC_EnableIRQ(BUT4_PIO_ID);
+	NVIC_SetPriority(BUT4_PIO_ID, 4); // Prioridade 4
+	
 }
 
 static void configure_console(void) {
@@ -201,7 +348,7 @@ int hc05_init(void) {
 	vTaskDelay( 500 / portTICK_PERIOD_MS);
 	usart_send_command(USART_COM, buffer_rx, 1000, "AT", 100);
 	vTaskDelay( 500 / portTICK_PERIOD_MS);
-	usart_send_command(USART_COM, buffer_rx, 1000, "AT+NAMEagoravai", 100);
+	usart_send_command(USART_COM, buffer_rx, 1000, "AT+NAMEcearaMor", 100);
 	vTaskDelay( 500 / portTICK_PERIOD_MS);
 	usart_send_command(USART_COM, buffer_rx, 1000, "AT", 100);
 	vTaskDelay( 500 / portTICK_PERIOD_MS);
@@ -222,32 +369,60 @@ void task_bluetooth(void) {
 	// configura LEDs e Botões
 	io_init();
 
-	char button1 = '0';
+	
 	char eof = 'X';
 
 	// Task não deve retornar.
 	while(1) {
-		// atualiza valor do botão
-		if(pio_get(BUT_PIO, PIO_INPUT, BUT_IDX_MASK) == 0) {
-			button1 = '1';
-		} else {
-			button1 = '0';
+		char button = '0';
+		// atualiza valor do botão VERDE
+		if(xSemaphoreTake(xSemaphoreBut, 1)) {
+			button |= 0b00000001;
+			printf("verde");
 		}
-
+		
+		
+		// atualiza valor do botão VERMELHO
+		if(xSemaphoreTake(xSemaphoreBut1, 1)) {
+			button |= 0b00000010;
+			printf("vermelho");
+		}
+		
+		
+		// atualiza valor do botão AMARELO
+		if(xSemaphoreTake(xSemaphoreBut2, 1)) {
+			button |= 0b00000100;
+			printf("ama");
+		}
+		
+		
+		// atualiza valor do botão AZUL
+		if(xSemaphoreTake(xSemaphoreBut3, 1)) {
+			button |= 0b00001000;
+			printf("az");
+		}
+		
+		// atualiza valor do botão POWER
+		if(xSemaphoreTake(xSemaphoreBut4, 1)) {
+			button |= 0b00001010;
+			printf("pow");
+		}
+	
 		// envia status botão
 		while(!usart_is_tx_ready(USART_COM)) {
-			vTaskDelay(10 / portTICK_PERIOD_MS);
+			vTaskDelay(1 / portTICK_PERIOD_MS);
 		}
-		usart_write(USART_COM, button1);
+		usart_write(USART_COM, button);
 		
 		// envia fim de pacote
 		while(!usart_is_tx_ready(USART_COM)) {
-			vTaskDelay(10 / portTICK_PERIOD_MS);
+			vTaskDelay(1 / portTICK_PERIOD_MS);
 		}
 		usart_write(USART_COM, eof);
 
 		// dorme por 500 ms
-		vTaskDelay(500 / portTICK_PERIOD_MS);
+		vTaskDelay(500/ portTICK_PERIOD_MS);
+		
 	}
 }
 
@@ -261,6 +436,29 @@ int main(void) {
 	board_init();
 
 	configure_console();
+	
+	/* Attempt to create a semaphore. */
+	xSemaphoreBut = xSemaphoreCreateBinary();
+	if (xSemaphoreBut == NULL){
+	printf("falha em criar o semaforo \n"); }
+	
+	xSemaphoreBut1 = xSemaphoreCreateBinary();
+	if (xSemaphoreBut1 == NULL){
+	printf("falha em criar o semaforo \n"); }
+	
+	xSemaphoreBut2 = xSemaphoreCreateBinary();
+	if (xSemaphoreBut2 == NULL){
+	printf("falha em criar o semaforo \n"); }
+	
+	xSemaphoreBut3 = xSemaphoreCreateBinary();
+	if (xSemaphoreBut3 == NULL){
+	printf("falha em criar o semaforo \n"); }
+	
+	xSemaphoreBut4 = xSemaphoreCreateBinary();
+	if (xSemaphoreBut4 == NULL){
+	printf("falha em criar o semaforo \n"); }
+	
+
 
 	/* Create task to make led blink */
 	xTaskCreate(task_bluetooth, "BLT", TASK_BLUETOOTH_STACK_SIZE, NULL,	TASK_BLUETOOTH_STACK_PRIORITY, NULL);
@@ -272,4 +470,5 @@ int main(void) {
 
 	/* Will only get here if there was insufficient memory to create the idle task. */
 	return 0;
-}
+
+	}

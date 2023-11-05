@@ -6,7 +6,13 @@ import logging
 
 class MyControllerMap:
     def __init__(self):
-        self.button = {'A': 'L'} # Fast forward (10 seg) pro Youtube
+         self.button = {
+            'VERDE': 'A',
+            'VERMELHO': 'S',
+            'AMARELO': 'J',
+            'AZUL': 'K',
+            'POWER': 'shift'
+        }
 
 class SerialControllerInterface:
     # Protocolo
@@ -20,20 +26,51 @@ class SerialControllerInterface:
         pyautogui.PAUSE = 0  ## remove delay
     
     def update(self):
-        ## Sync protocol
+        ## Sync protocolfv z
         while self.incoming != b'X':
             self.incoming = self.ser.read()
             logging.debug("Received INCOMING: {}".format(self.incoming))
 
-        data = self.ser.read()
-        logging.debug("Received DATA: {}".format(data))
+        data_byte = self.ser.read()
+        if data_byte:  # Make sure that a byte was actually read.
+            data = data_byte[0]  # Convert from bytes to int
+            logging.debug("Received DATA: {}".format(data))
 
-        if data == b'1':
-            logging.info("KEYDOWN A")
-            pyautogui.keyDown(self.mapping.button['A'])
-        elif data == b'0':
-            logging.info("KEYUP A")
-            pyautogui.keyUp(self.mapping.button['A'])
+
+        if data & 0b00000001:
+            logging.info("KEYDOWN VERDE")
+            pyautogui.keyDown(self.mapping.button['VERDE'])
+        else:
+            logging.info("KEYUP VERDE")
+            pyautogui.keyUp(self.mapping.button['VERDE'])
+
+        if data & 0b00000010:
+            logging.info("KEYDOWN VERMELHO")
+            pyautogui.keyDown(self.mapping.button['VERMELHO'])
+        else:
+            logging.info("KEYUP VERMELHO")
+            pyautogui.keyUp(self.mapping.button['VERMELHO'])
+
+        if data & 0b00000100:
+            logging.info("KEYDOWN AMARELO")
+            pyautogui.keyDown(self.mapping.button['AMARELO'])
+        else:
+            logging.info("KEYUP AMARELO")
+            pyautogui.keyUp(self.mapping.button['AMARELO'])
+
+        if data & 0b00001000:
+            logging.info("KEYDOWN AZUL")
+            pyautogui.keyDown(self.mapping.button['AZUL'])
+        else:
+            logging.info("KEYUP AZUL")
+            pyautogui.keyUp(self.mapping.button['AZUL'])
+
+        if data & 0b00010000:
+            logging.info("KEYDOWN POWER")
+            pyautogui.keyDown(self.mapping.button['POWER'])
+        else:
+            logging.info("KEYUP POWER")
+            pyautogui.keyUp(self.mapping.button['POWER'])
 
         self.incoming = self.ser.read()
 
@@ -43,12 +80,35 @@ class DummyControllerInterface:
         self.mapping = MyControllerMap()
 
     def update(self):
-        pyautogui.keyDown(self.mapping.button['A'])
+        pyautogui.keyDown(self.mapping.button['VERDE'])
         time.sleep(0.1)
-        pyautogui.keyUp(self.mapping.button['A'])
+        pyautogui.keyUp(self.mapping.button['VERDE'])
         logging.info("[Dummy] Pressed A button")
         time.sleep(1)
 
+        pyautogui.keyDown(self.mapping.button['VERMELHO'])
+        time.sleep(0.1)
+        pyautogui.keyUp(self.mapping.button['VERMELHO'])
+        logging.info("[Dummy] Pressed A button")
+        time.sleep(1)
+
+        pyautogui.keyDown(self.mapping.button['AMARELO'])
+        time.sleep(0.1)
+        pyautogui.keyUp(self.mapping.button['AMARELO'])
+        logging.info("[Dummy] Pressed A button")
+        time.sleep(1)
+
+        pyautogui.keyDown(self.mapping.button['AZUL'])
+        time.sleep(0.1)
+        pyautogui.keyUp(self.mapping.button['AZUL'])
+        logging.info("[Dummy] Pressed A button")
+        time.sleep(1)
+
+        pyautogui.keyDown(self.mapping.button['POWER'])
+        time.sleep(0.1)
+        pyautogui.keyUp(self.mapping.button['POWER'])
+        logging.info("[Dummy] Pressed A button")
+        time.sleep(1)
 
 if __name__ == '__main__':
     interfaces = ['dummy', 'serial']
