@@ -347,13 +347,8 @@ static void config_AFEC_pot(Afec *afec, uint32_t afec_id, uint32_t afec_channel,
 static void configure_console(void) {
 	const usart_serial_options_t uart_serial_options = {
 		.baudrate = CONF_UART_BAUDRATE,
-		#if (defined CONF_UART_CHAR_LENGTH)
-		.charlength = CONF_UART_CHAR_LENGTH,
-		#endif
 		.paritytype = CONF_UART_PARITY,
-		#if (defined CONF_UART_STOP_BITS)
-		.stopbits = CONF_UART_STOP_BITS,
-		#endif
+
 	};
 
 	/* Configure console UART. */
@@ -369,13 +364,7 @@ static void configure_console(void) {
 	#endif
 }
 
-uint32_t usart_puts(uint8_t *pstring) {
-	uint32_t i ;
 
-	while(*(pstring + i))
-	if(uart_is_tx_empty(USART_COM))
-	usart_serial_putchar(USART_COM, *(pstring+i++));
-}
 
 void usart_put_string(Usart *usart, char str[]) {
 	usart_serial_write_packet(usart, str, strlen(str));
@@ -498,7 +487,7 @@ void task_bluetooth(void) {
 		if(!usart_read(USART_COM, &x)){
 			if(x == 'z'){
 				printf("Handshake ok");
-				for(int i =0 ; i <=20 ; i++){
+				for(int i =0 ; i <=10 ; i++){
 					_pio_set(LED_PIO, LED_IDX_MASK);
 					vTaskDelay(5);
 					_pio_clear(LED_PIO, LED_IDX_MASK);
@@ -581,7 +570,7 @@ void task_bluetooth(void) {
 
 		// dorme por 500 ms
 		
-		vTaskDelay(5/ portTICK_PERIOD_MS);
+		vTaskDelay(1/ portTICK_PERIOD_MS);
 		
 	}
 }
